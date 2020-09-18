@@ -1,0 +1,173 @@
+---
+title: "Subsetting"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+This exercise is a collection of questions, which were posted on the account [DSQAD: Data Science Question A Day](https://twitter.com/data_question), related to subsetting in R.
+
+
+### Subsetting
+
+In R, there are three operators: `$`, `[`, `[[`, used for subsetting. You could refresh your knowledge by going through the subsetting chapter in [Advanced R by Hadley Wickham](https://adv-r.hadley.nz/subsetting.html). This covers almost all aspects of subsetting.
+
+
+## Quiz
+
+```{r quiz}
+quiz(
+  
+  question("Can you index using a character vector? For example what would the following code return?
+           
+           x = c('a' = 1, 'b' = 2, 'c' = 4)
+           x[c('a', 'c')]",
+           answer("1 2"),
+           answer("1 4"),
+           answer("Error: Only numeric indexes can be used"),
+           answer("`a c
+1 4`", correct=TRUE),
+           message = "`[` and `[[` allows the use of character vector for subsetting. The character vector is matched against the names of elements in the vector or list."),
+
+  question("Logical vectors can also be used for indexing. What would the following code return?
+         
+           x = c(1, 2, 3, 4, 5)
+           x[x > 3]",
+           answer("`1 2 3 4 5`"),
+           answer("`4 5`", correct = TRUE),
+           answer("Error: only numeric indexes are allowed"),
+           answer("NA"),
+           message = "At first the expression `x > 3` is evaluated, which returns a logical vector `c(FALSE, FALSE, FALSE, TRUE, TRUE)`, the positions with `TRUE` are returned and the positions with `FALSE` aren't returned."),
+
+  question("What happens when you try to index with a factor? For example, what would the following code return?
+           
+           x = 1:6,
+           y = factor(c('a', 'b', 'c'))
+           x[y]",
+           answer("`Error: No matching names found`"),
+           answer("`1 2 3`", correct=TRUE),
+           answer("`Error: Incorred indexes supplied`"),
+           answer("`NA NA NA NA NA NA`"),
+           message = "Factors can also be used for indexing, although the result might not be something you would expect. Internally factors have numerical bindings, so when used for indexing, the factors are converted to their numerical bindings and then that numerical vector is used for indexing. So in this case, `factor('a', 'b', 'c')` is converted to `c(1,2,3)` behind the scenes, and then used for indexing."),
+
+  question("What happens when the indexing key's length is greater than your vector? For example what would the following code returns?
+           
+           x = c(1, 2, 4)
+           y = c(2, 2, 2, 2, 2)
+           x[y]",
+           answer("`2 NA NA NA NA`"),
+           answer("`2 2 2 2 2`", correct = TRUE),
+           answer("`1 2 4 NA NA`"),
+           answer("None of the above"),
+           message = "When you are using a numerical vector for indexing, the elements of indexer are matched against the position of original vector. So the 2 in y is matched to the position 2 of x. The above example is basically `c(x[2], x[2], x[2], x[2], x[2])`"),
+
+  question("Once more, what happens when the indexing key's length is greater than your vector? For example what would the following code returns?
+           
+           x = c(1, 2, 3)
+           y = seq(1, 5, by=1)
+           x[y]",
+           answer("`1 2 3`"),
+           answer("`Error: Incorrect indexing length`"),
+           answer("`1 2 3 NA NA`", correct=TRUE),
+           answer("`NA NA NA NA NA`"),
+           message = "When you are using a numerical vector for indexing, the elements of indexer are matched against the position of original vector. So the 5 in y is matched to the position 5 of `x` and since `x[5]` doesn't exist `NA` is returned. If a particular position doesn't exist `NA` is returned."),
+
+  question("Okay, last one, What happens when the indexing key's length is greater than your vector? For example what would the following code returns?
+           
+           x = c(1, 2, 3)
+           y = c(TRUE, TRUE, FALSE, FALSE, TRUE),
+           x[y]",
+           answer("`Error: Only numeric keys allowed`"),
+           answer("`Error: Incorrect length supplied`"),
+           answer("`1 2 NA`", correct=TRUE),
+           answer("`1 2 2`"),
+           message = "Logical vectors, when used in indexing behave a bit different. In this case, since the length of `y` is greater than `x`, imagine `x` to be extended to match `y`'s length and new positions getting filled with `NA`, like `c(1,2,3,NA,NA)` All those positions in `x` which are matching with `TRUE`'s position in `y` are reutrned, which in this case are position 1, 2, and 5, so the returned value is `1 2 NA`."),
+  
+  question("Now here's some twist, what happens when the indexing key's length is smaller than your vector? For example what would the following code returns?
+           
+           x = 1:6
+           y = c(TRUE, TRUE, FALSE, FALSE, NA)
+           x[y]",
+           answer("`Error: Only numeric keys allowed`"),
+           answer("`Error: Incorrect length supplied`"),
+           answer("`1 2 NA 6`", correct=TRUE),
+           answer("`NA NA NA NA NA NA`"),
+           message="There are two things to note here. First: Indexing with NA, and Second: Indexing with logicals. When you index with NA, you get NA. When you index with logical vectors, the positions with `TRUE` gets selected and the ones with `FALSE` are dropped. If in case your logical vector is of smaller length, the elements are recycled to match the corresponding length. So in the above example: `y` is of length 4, so when used as `x[y]`, `y` gets recycled to `(T, F, F, NA, T, F)` and `x` is indexed as `x[c(T, F, F, NA, T, F)]`. Since position `1` and `5` are `TRUE`, those will be returned, the ones with `FALSE` will not be returned and the position which has `NA` will return `NA`. So the output will be `1 NA 5`"),
+  
+  question("What would the following code return?
+           
+           x = list('a' = c(1,2), 'bbb' = c(4, 5,6))
+           x$b",
+           answer("`Error: $ not allowed for atomic vectors`"),
+           answer("`NULL`"),
+           answer("`Error: b not found`"),
+           answer("`4 5 6`", correct=TRUE),
+           message = "`$` operator allows for partial name matching. So `b` is matched with `bbb`"),
+  
+  question("What would the following code return?
+           
+           x = list('a' = c(1,2), 'bbb' = c(4, 5, 6))
+           x$b = 6
+           names(x)",
+           answer('`"a" "bbb" "b"`', correct=TRUE),
+           answer('`"a" "bbb"`'),
+           answer('`"a" "b"`'),
+           answer("None of the above"),
+           message = "As noted above, that `$` allows for partial name matching, but in case of assignment it it creates a new element with that name. Like in the above example, element with name `b` and value `6` is created in the list, as it doesn't exist. If the element exists, it's value will be overwritten."),
+
+  question("What would the following code return?
+           
+           x = list('a' = c(1,2), 'bbb' = c(4, 5,6))
+           x[['b']]",
+           answer("`Error: [[ not allowed for atomic vectors`"),
+           answer("`NULL`", correct=TRUE),
+           answer("`Error: b not found`"),
+           answer("`4 5 6`"),
+           message = "`[[` doesn't allow for partial name matching by default. That's the main difference between `[[` and `$`. Although unadvisable, but you could achieve partial name matching by passing argument `exact = FALSE`"),
+
+  question("What would the following code return?
+           
+           x = list('a' = c(1,2), 'b' = c(3,4))
+           class(x[1])
+           ",
+    answer("list", correct = TRUE),
+    answer("numeric"),
+    answer("character"),
+    answer("logical"),
+    message = "In case of lists, `[` selects sub-lists: it always returns a list. If you use it with a single positive integer, it returns a list of length one. `[[` selects an element within a list."),
+
+  question("What would be the class of the object returned by the following code?
+           
+           mtcars[, 'cyl']",
+    answer("data.frame"),
+    answer("numeric", correct = TRUE),
+    answer("integer"),
+    answer("double"),
+    message = "By default, `[` simplifies the returned object and returns a vector, in case of dataframes. To preserve the row column structure, use the argument `drop = FALSE`"),
+
+  question("From the given list, you are trying to access `hello`, which of the following command would work?
+           
+           z = list( a = list( b = 9, c = 'hello'), d = 1:5)",
+           answer("`z$a$c`"),
+           answer("`z[['a']]$c`"),
+           answer("`z[[c('a', 'c')]]`"),
+           answer("All of the above", correct=TRUE),
+           message = "In R, `$`, `[` and `[[` are used for indexing. The most important difference between `[`, `[[` and `$` is that the `[` can select more than one elements while the other two select a single element. The main difference between `$` and `[[` is that `$` does not allow computed indices whereas `[[` does. `z[['a']]` is equivalent to `z$a`. `[[` can be applied recursively to lists as shown in option 3, `z[[c('a', 'c')]]` is equivalent to `z[['a']][['c']]`.")
+)
+```
+
+## Contribute
+
+Hope you enjoyed the quiz, if so please do share among your peers. Also if you would like, you can make a generous contribution at [ko-fi](https://ko-fi.com/dsqad). Your contributions would inspire us to make more quizzes like this. If you have any feedback, please feel free to reach out to our twitter [handle](https://twitter.com/data_question) 
+
+Also if you would like to contribute or report any corrections or would like to add any question, please feel free to report an issue on the [GitHub]()
+
+This work is licensed under MIT license.
