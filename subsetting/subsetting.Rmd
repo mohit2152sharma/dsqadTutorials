@@ -166,8 +166,8 @@ quiz(
 
 ## Contribute
 
-Hope you enjoyed the quiz, if so please do share among your peers. Also if you would like, you can make a generous contribution at [ko-fi](https://ko-fi.com/dsqad). Your contributions would inspire us to make more quizzes like this. If you have any feedback, please feel free to reach out to our twitter [handle](https://twitter.com/data_question) 
+Hope you enjoyed the quiz, if so please do share among your peers. Also if you would like, you can make a generous contribution at [ko-fi](https://ko-fi.com/dsqad). Your contributions would inspire us to make more quizzes like this. If you have any feedback, please feel free to reach out to [DSQAD](https://twitter.com/data_question), our twitter handle. Be sure to follow DSQAD for daily questions.
 
-Also if you would like to contribute or report any corrections or would like to add any question, please feel free to report an issue on the [GitHub]()
+Also if you would like to contribute or report any corrections or would like to add any question, please feel free to report an issue on the [GitHub](https://github.com/mohit2152sharma/dsqadTutorials)
 
 This work is licensed under MIT license.
