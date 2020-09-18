@@ -1,0 +1,12 @@
+name: subsetting
+title: subsetting
+username:
+account: monty
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2841050
+bundleId: 3644442
+url: https://monty.shinyapps.io/subsetting/
+when: 1600449236.15061
+asMultiple: FALSE
+asStatic: FALSE

@@ -25,14 +25,14 @@ In R, there are three operators: `$`, `[`, `[[`, used for subsetting. You could 
 
 ```{r quiz}
 quiz(
-  
+  caption = "Subsetting in R",
   question("Can you index using a character vector? For example what would the following code return?
            
            x = c('a' = 1, 'b' = 2, 'c' = 4)
            x[c('a', 'c')]",
-           answer("1 2"),
-           answer("1 4"),
-           answer("Error: Only numeric indexes can be used"),
+           answer("`1 2`"),
+           answer("`1 4`"),
+           answer("`Error: Only numeric indexes can be used`"),
            answer("`a c
 1 4`", correct=TRUE),
            message = "`[` and `[[` allows the use of character vector for subsetting. The character vector is matched against the names of elements in the vector or list."),
@@ -43,8 +43,8 @@ quiz(
            x[x > 3]",
            answer("`1 2 3 4 5`"),
            answer("`4 5`", correct = TRUE),
-           answer("Error: only numeric indexes are allowed"),
-           answer("NA"),
+           answer("`Error: only numeric indexes are allowed`"),
+           answer("`NA`"),
            message = "At first the expression `x > 3` is evaluated, which returns a logical vector `c(FALSE, FALSE, FALSE, TRUE, TRUE)`, the positions with `TRUE` are returned and the positions with `FALSE` aren't returned."),
 
   question("What happens when you try to index with a factor? For example, what would the following code return?
