@@ -5,8 +5,8 @@ account: monty
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2841050
-bundleId: 3644442
+bundleId: 3644468
 url: https://monty.shinyapps.io/subsetting/
-when: 1600449236.15061
+when: 1600449926.36987
 asMultiple: FALSE
 asStatic: FALSE
