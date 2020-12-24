@@ -1,0 +1,126 @@
+Are loops slow in R and should you avoid them?
+
+To think of a vectorized solution can be hard and often times it is easier to think of solution with for loops.
+
+Welcome to the for loops tweetorial, where we will see how to write good for loops in R.
+
+One of the most common use case is element wise operation, like multiplying vectors element wise or for example, the simplest, returning a square sequence from 1 to n.
+
+```{r}
+x = reprex({
+sequence_for = function(n){
+  a = NULL
+  for(i in 1:n) a[i] = i^2
+  a
+}
+},advertise=F)
+
+z = carbon(x)
+```
+
+This function is slow, might not be noticeably slow, but if you compare with the vectorised solution, you can see the difference. The reason for this slowness is copy on modify. To create a bigger object, R first allocates space for the new object and then copy the old object to the new object.
+
+```{r}
+x = reprex({
+sequence_for = function(n){
+  a = NULL
+  for(i in 1:n) a[i] = i^2
+  a
+}
+
+microbenchmark::microbenchmark(
+  "sequence_for" = sequence_for(100),
+  "sequence_vect" = (1:100)^2
+)
+},advertise=F)
+
+z = carbon(x)
+```
+
+How can you improve? pre-allocate the size, initialize the result storing vector to the required length (=number of intended calculations)
+
+```{r}
+x = reprex({
+sequence_for = function(n){
+  a = NULL
+  for(i in 1:n) a[i] = i^2
+  a
+}
+
+sequence_for_len = function(n){
+  a = numeric(n)
+  for(i in 1:n) a[i] = i^2
+  a
+}
+
+microbenchmark::microbenchmark(
+  "sequence_for" = sequence_for(100),
+  "sequence_for_len"= sequence_for_len(100),
+  "sequence_vect" = (1:100)^2
+)
+}, advertise=F)
+
+z = carbon(x)
+```
+
+Vector solution is best, but if in case it doesn't work, remember to pre-allocate the size.
+
+Other useful tip to improve is, if something can be performed outside the loop, keep it outside, it does not make sense to repeat the same calculation n times.
+
+```{r}
+x = reprex({
+inside = function(n){
+  a = numeric(n)
+  for(i in 1:n) a[i] = 1 + sqrt(i)
+  a
+}
+
+outside = function(n){
+  b = numeric(n)
+  for(i in 1:n) b[i] = sqrt(i)
+  1 + b
+}
+
+microbenchmark::microbenchmark(
+  "inside" = inside(10000),
+  "outside" = outside(10000)
+)
+}, advertise=F)
+
+z = carbon(x)
+```
+
+Another common example is, when you have to bind dataframes. Using `rbind()` or `cbind()` inside a for loop could be slow, It is better to store the intermediate dataframes in a list and combine them together outside the for loop.
+
+```{r}
+x = reprex({
+dframes_combine1 = function(template, ...){
+  to_combine = list(...)
+  for(i in 1:length(to_combine)){
+    template = rbind(template, to_combine[[i]])
+  }
+  template
+}
+
+dframes_combine2 = function(template, ...){
+  to_combine =list(template, ...)
+  template = do.call("rbind", to_combine)
+}
+
+template = data.frame(x = 1,
+                      y = 1)
+df1 = data.frame(x = 2,
+                 y = 2)
+df2 = data.frame(x = 3,
+                 y = 3)
+df3 = data.frame(x = 4,
+                 y = 4)
+
+microbenchmark::microbenchmark(
+  "combine1" = dframes_combine1(template, df1, df2, df3),
+  "combine2" = dframes_combine2(template, df1, df2, df3)
+)
+}, advertise=F)
+
+z = carbon(x)
+```
