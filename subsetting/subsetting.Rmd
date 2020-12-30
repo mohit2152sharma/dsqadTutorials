@@ -94,11 +94,11 @@ quiz(
   question("Now here's some twist, what happens when the indexing key's length is smaller than your vector? For example what would the following code returns?
            
            x = 1:6
-           y = c(TRUE, TRUE, FALSE, FALSE, NA)
+           y = c(TRUE, FALSE, FALSE, NA)
            x[y]",
            answer("`Error: Only numeric keys allowed`"),
            answer("`Error: Incorrect length supplied`"),
-           answer("`1 2 NA 6`", correct=TRUE),
+           answer("`1 NA 5`", correct=TRUE),
            answer("`NA NA NA NA NA NA`"),
            message="There are two things to note here. First: Indexing with NA, and Second: Indexing with logicals. When you index with NA, you get NA. When you index with logical vectors, the positions with `TRUE` gets selected and the ones with `FALSE` are dropped. If in case your logical vector is of smaller length, the elements are recycled to match the corresponding length. So in the above example: `y` is of length 4, so when used as `x[y]`, `y` gets recycled to `(T, F, F, NA, T, F)` and `x` is indexed as `x[c(T, F, F, NA, T, F)]`. Since position `1` and `5` are `TRUE`, those will be returned, the ones with `FALSE` will not be returned and the position which has `NA` will return `NA`. So the output will be `1 NA 5`"),
   
@@ -166,7 +166,7 @@ quiz(
 
 ## Contribute
 
-Hope you enjoyed the quiz, if so please do share among your peers. Also if you would like, you can make a generous contribution at [ko-fi](https://ko-fi.com/dsqad). Your contributions would inspire us to make more quizzes like this. If you have any feedback, please feel free to reach out to [DSQAD](https://twitter.com/data_question), our twitter handle. Be sure to follow DSQAD for daily questions.
+Hope you enjoyed the quiz, if so please do share among your peers. Also if you would like, you can make a generous contribution [here](https://www.buymeacoffee.com/NgFs2zX). Your contributions would inspire us to make more quizzes like this. If you have any feedback, please feel free to reach out to [DSQAD](https://twitter.com/data_question), our twitter handle. Be sure to follow DSQAD for daily questions.
 
 Also if you would like to contribute or report any corrections or would like to add any question, please feel free to report an issue on the [GitHub](https://github.com/mohit2152sharma/dsqadTutorials)
 
